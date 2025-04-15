@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import FileInput from '@/Components/FileInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -19,6 +20,8 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
+    avatar: user.avatar,
+    bio: user.bio,
 });
 </script>
 
@@ -67,6 +70,18 @@ const form = useForm({
                 />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div>
+                <FileInput
+                    id="avatar"
+                    v-model="form.avatar"
+                    label="Profile Picture"
+                    accept="image/*"
+                    class="mt-4"
+                />
+
+                <InputError class="mt-2" :message="form.errors.avatar" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
