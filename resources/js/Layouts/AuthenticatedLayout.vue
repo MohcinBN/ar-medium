@@ -7,7 +7,16 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
+defineProps({
+    title: String,
+});
+
 const showingNavigationDropdown = ref(false);
+
+const getAvatarUrl = (avatar) => {
+    if (!avatar) return null;
+    return `/storage/${avatar}`;
+};
 </script>
 
 <template>
@@ -43,6 +52,12 @@ const showingNavigationDropdown = ref(false);
                         </div>
 
                         <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                            <img 
+                                class="h-8 w-8 rounded-full object-cover border border-gray-200"
+                                :src="getAvatarUrl($page.props.auth.user.avatar)"
+                                :alt="$page.props.auth.user.name"
+                                @error="($event) => $event.target.style.display='none'"
+                            />
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">

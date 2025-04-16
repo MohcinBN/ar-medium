@@ -3,7 +3,6 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import FileInput from '@/Components/FileInput.vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 
 defineProps({
@@ -20,9 +19,14 @@ const user = usePage().props.auth.user;
 const form = useForm({
     name: user.name,
     email: user.email,
-    avatar: user.avatar,
     bio: user.bio,
 });
+
+function submit() {
+    form.patch(route('profile.update'), {
+        preserveScroll: true,
+    });
+}
 </script>
 
 <template>
@@ -38,7 +42,7 @@ const form = useForm({
         </header>
 
         <form
-            @submit.prevent="form.patch(route('profile.update'))"
+            @submit.prevent="submit()"
             class="mt-6 space-y-6"
         >
             <div>
@@ -73,15 +77,15 @@ const form = useForm({
             </div>
 
             <div>
-                <FileInput
-                    id="avatar"
-                    v-model="form.avatar"
-                    label="Profile Picture"
-                    accept="image/*"
-                    class="mt-4"
-                />
-
-                <InputError class="mt-2" :message="form.errors.avatar" />
+                <InputLabel for="bio" value="Bio" />
+                <textarea
+                    id="bio"
+                    v-model="form.bio"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    rows="4"
+                    placeholder="Tell us about yourself..."
+                ></textarea>
+                <InputError class="mt-2" :message="form.errors.bio" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">

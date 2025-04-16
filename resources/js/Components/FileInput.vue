@@ -26,11 +26,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:modelValue']);
-
 const fileInput = ref(null);
 
 const handleFileChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0] || null;
     emit('update:modelValue', file);
 };
 

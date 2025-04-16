@@ -9,9 +9,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravolt\Avatar\Facade as Avatar;
 
 class RegisteredUserController extends Controller
 {
@@ -36,16 +40,38 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try {
+            // Create storage directory if it doesn't exist
+            $avatarPath = storage_path('app/public/avatars');
+            if (!file_exists($avatarPath)) {
+                mkdir($avatarPath, 0755, true);
+            }
 
-        event(new Registered($user));
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        Auth::login($user);
+            // Generate and save avatar
+            $avatarFilename = 'avatars/' . $user->id . '.png';
+            Avatar::create($request->name)
+                ->setDimension(200, 200)
+                ->setFontSize(96)
+                ->setBackground('#2563eb')
+                ->save(storage_path('app/public/' . $avatarFilename));
 
-        return redirect(route('dashboard', absolute: false));
+            // Update user's avatar path
+            $user->update(['avatar' => $avatarFilename]);
+
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            return redirect(route('dashboard', absolute: false));
+        } catch (\Exception $e) {
+            Log::error('Avatar creation failed:', ['error' => $e->getMessage()]);
+            throw $e;
+        }
     }
 }
