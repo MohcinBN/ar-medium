@@ -17,6 +17,7 @@ class PostController extends Controller
     {
         return Inertia::render('Posts/Index', [
             'posts' => Post::with('user')->latest()->get(),
+            'tags' => Tag::all(['id', 'name']),
             'success' => session('success')
         ]);
     }
