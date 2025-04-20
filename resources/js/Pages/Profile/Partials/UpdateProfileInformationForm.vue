@@ -33,11 +33,11 @@ function submit() {
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
-                Profile Information
+                معلومات الملف الشخصي
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Update your account's profile information and email address.
+                تحديث معلومات حسابك وعنوان بريدك الإلكتروني.
             </p>
         </header>
 
@@ -46,7 +46,7 @@ function submit() {
             class="mt-6 space-y-6"
         >
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="الاسم" />
 
                 <TextInput
                     id="name"
@@ -62,7 +62,7 @@ function submit() {
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="البريد الإلكتروني" />
 
                 <TextInput
                     id="email"
@@ -77,27 +77,27 @@ function submit() {
             </div>
 
             <div>
-                <InputLabel for="bio" value="Bio" />
+                <InputLabel for="bio" value="نبذة" />
                 <textarea
                     id="bio"
                     v-model="form.bio"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     rows="4"
-                    placeholder="Tell us about yourself..."
+                    placeholder="أخبرنا عن نفسك..."
                 ></textarea>
                 <InputError class="mt-2" :message="form.errors.bio" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="mt-2 text-sm text-gray-800">
-                    Your email address is unverified.
+                    عنوان بريدك الإلكتروني غير مؤكد.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
                         class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        Click here to re-send the verification email.
+                        انقر هنا لإعادة إرسال رسالة التحقق.
                     </Link>
                 </p>
 
@@ -105,12 +105,12 @@ function submit() {
                     v-show="status === 'verification-link-sent'"
                     class="mt-2 text-sm font-medium text-green-600"
                 >
-                    A new verification link has been sent to your email address.
+                    تم إرسال رابط تحقق جديد إلى عنوان بريدك الإلكتروني.
                 </div>
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton :disabled="form.processing">حفظ</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -122,7 +122,7 @@ function submit() {
                         v-if="form.recentlySuccessful"
                         class="text-sm text-gray-600"
                     >
-                        Saved.
+                        تم الحفظ.
                     </p>
                 </Transition>
             </div>
