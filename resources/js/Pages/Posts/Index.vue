@@ -7,7 +7,12 @@ import { format } from 'date-fns';
 const props = defineProps({
     posts: {
         type: Array,
-        required: true
+        required: true,
+        default: () => []
+    },
+    success: {
+        type: String,
+        default: null
     }
 });
 
@@ -47,6 +52,10 @@ const deletePost = (id) => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div v-if="success" class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                    {{ success }}
+                </div>
+
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <div class="overflow-x-auto">

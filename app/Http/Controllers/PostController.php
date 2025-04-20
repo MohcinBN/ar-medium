@@ -15,12 +15,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('user_id', auth()->id())
-            ->orderBy('created_at', 'desc')
-            ->get(['id', 'title', 'status', 'published_at', 'created_at']);
-
         return Inertia::render('Posts/Index', [
-            'posts' => $posts
+            'posts' => Post::with('user')->latest()->get(),
+            'success' => session('success')
         ]);
     }
 
@@ -45,9 +42,7 @@ class PostController extends Controller
             $post->tags()->attach($request->tags);
         }
 
-        return Inertia::render('Posts/Index', [
-            'success' => 'Post created successfully'
-        ]);
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
     public function edit(Post $post)
@@ -68,17 +63,13 @@ class PostController extends Controller
             $post->tags()->sync($request->tags);
         }
 
-        return Inertia::render('Posts/Index', [
-            'success' => 'Post updated successfully'
-        ]);
+        return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }
 
     public function destroy(Post $post)
     {
         $post->delete();
 
-        return Inertia::render('Posts/Index', [
-            'success' => 'Post deleted successfully'
-        ]);
+        return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
     }
 }
