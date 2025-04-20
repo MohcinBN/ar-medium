@@ -9,6 +9,7 @@ use App\Models\Tag;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Http\Requests\UpdatePostRequest;
 
 class PostController extends Controller
 {
@@ -46,6 +47,38 @@ class PostController extends Controller
 
         return Inertia::render('Posts/Index', [
             'success' => 'Post created successfully'
+        ]);
+    }
+
+    public function edit(Post $post)
+    {
+        return Inertia::render('Posts/Edit', [
+            'post' => $post->load('tags'),
+            'tags' => Tag::all(['id', 'name'])
+        ]);
+    }
+
+    public function update(UpdatePostRequest $request, Post $post)
+    {
+        $validatedData = $request->validated();
+
+        $post->update($validatedData);
+
+        if ($request->has('tags')) {
+            $post->tags()->sync($request->tags);
+        }
+
+        return Inertia::render('Posts/Index', [
+            'success' => 'Post updated successfully'
+        ]);
+    }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+
+        return Inertia::render('Posts/Index', [
+            'success' => 'Post deleted successfully'
         ]);
     }
 }

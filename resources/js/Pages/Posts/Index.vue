@@ -1,10 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { format } from 'date-fns';
 
-defineProps({
+const props = defineProps({
     posts: {
         type: Array,
         required: true
@@ -19,6 +19,12 @@ const statusColors = {
 const formatDate = (date) => {
     if (!date) return '-';
     return format(new Date(date), 'MMM d, yyyy');
+};
+
+const deletePost = (id) => {
+    if (window.confirm('Are you sure you want to delete this post?')) {
+        router.delete(route('posts.destroy', id));
+    }
 };
 </script>
 
@@ -89,8 +95,19 @@ const formatDate = (date) => {
                                             {{ formatDate(post.created_at) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</button>
-                                            <button class="text-red-600 hover:text-red-900">Delete</button>
+                                            <Link
+                                                :href="route('posts.edit', post.id)"
+                                                class="text-indigo-600 hover:text-indigo-900 mr-3"
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button 
+                                                @click="deletePost(post.id)"
+                                                type="button"
+                                                class="text-red-600 hover:text-red-900"
+                                            >
+                                                Delete
+                                            </button>
                                         </td>
                                     </tr>
                                     <tr v-if="posts.length === 0">
