@@ -48,6 +48,12 @@ const getAvatarUrl = (avatar) => {
                                 >
                                     Dashboard
                                 </NavLink>
+                                <NavLink
+                                    :href="route('posts.index')"
+                                    :active="route().current('posts.index')"
+                                >
+                                    Your Own Posts
+                                </NavLink>
                             </div>
                         </div>
 

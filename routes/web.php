@@ -5,6 +5,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\SocialiteController;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -33,5 +34,10 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/{provider}', [SocialiteController::class, 'redirect']);
     Route::get('/auth/{provider}/callback', [SocialiteController::class, 'callback']);
 });
+
+// posts routes
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::post('/posts/store', [PostController::class, 'store'])->name('posts.store');
 
 require __DIR__.'/auth.php';

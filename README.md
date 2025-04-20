@@ -6,3 +6,4 @@ Todos:
 - Add users can like other users posts
 - Add admin functionality: 
     - List and manage users
+    - Only admin can add tags so to be shown in the dropdown when users want to add post with tags
