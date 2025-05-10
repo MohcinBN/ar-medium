@@ -7,6 +7,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\SuperAdminController;
+use App\Http\Middleware\SuperAdminMiddleware;
 
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 
@@ -33,9 +35,17 @@ Route::middleware('guest')->group(function () {
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
 Route::post('/posts/store', [PostController::class, 'store'])->name('posts.store');
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+
+// SuperAdmin routes
+Route::middleware(['auth', SuperAdminMiddleware::class])->group(function () {
+    Route::get('/admin/users', [SuperAdminController::class, 'getAllUsers'])->name('admin.users');
+    Route::delete('/admin/users/{id}', [SuperAdminController::class, 'deleteUser'])->name('admin.users.delete');
+    Route::put('/admin/users/{id}/role', [SuperAdminController::class, 'updateUserRole'])->name('admin.users.updateRole');
+});
 
 // public routes
 Route::get('/home', [HomePageController::class, 'index'])->name('home');

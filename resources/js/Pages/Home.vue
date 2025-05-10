@@ -71,7 +71,7 @@
                                         <span class="text-sm text-gray-600">{{ post.user.name }}</span>
                                     </div>
                                     <Link
-                                       
+                                        :href="route('posts.show', post.id)"
                                         class="mt-2 block"
                                     >
                                         <h3 class="text-xl font-bold text-gray-900">
@@ -81,10 +81,16 @@
                                             {{ post.body }}
                                         </p>
                                     </Link>
-                                    <div class="mt-4 flex items-center space-x-4 text-sm text-gray-500">
-                                        <time>{{ new Date(post.created_at).toLocaleDateString('ar-SA') }}</time>
-                                        <span>·</span>
-                                        <span>{{ Math.ceil(post.body.length / 200) }} دقائق للقراءة</span>
+                                    <div class="mt-4 flex items-center space-x-4">
+                                        <time class="text-sm text-gray-500">{{ new Date(post.created_at).toLocaleDateString('ar-SA') }}</time>
+                                        <span class="text-sm text-gray-500">·</span>
+                                        <span class="text-sm text-gray-500">{{ Math.ceil(post.body.length / 200) }} دقائق للقراءة</span>
+                                        <Link 
+                                            :href="route('posts.show', post.id)"
+                                            class="text-sm text-green-600 hover:text-green-700"
+                                        >
+                                            قراءة المزيد
+                                        </Link>
                                     </div>
                                 </div>
                                 <div v-if="post.image" class="h-32 w-32">
