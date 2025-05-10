@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Middleware\SuperAdminMiddleware;
 
 Route::get('/', [HomePageController::class, 'index'])->name('home');
@@ -49,5 +50,8 @@ Route::middleware(['auth', SuperAdminMiddleware::class])->group(function () {
 
 // public routes
 Route::get('/home', [HomePageController::class, 'index'])->name('home');
+
+// comment routes
+Route::post('/posts/{post}/comments', [CommentController::class, 'storeNewComment'])->name('posts.comments.store');
 
 require __DIR__.'/auth.php';

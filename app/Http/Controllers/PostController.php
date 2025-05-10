@@ -83,7 +83,7 @@ class PostController extends Controller
 
     public function show(Post $post) {
         return Inertia::render('Show', [
-            'post' => $post->load(['tags', 'user']),
+            'post' => $post->load(['tags', 'user', 'comments.user']),
             'tags' => Tag::all(['id', 'name'])
         ]);
     }
