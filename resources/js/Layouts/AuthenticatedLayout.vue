@@ -35,6 +35,9 @@ onMounted(() => {
                                 <NavLink :href="route('posts.index')" :active="route().current('posts.index')">
                                     {{ page.props.auth.user.roles?.includes('SuperAdmin') ? 'كل المقالات' : 'المقالات' }}
                                 </NavLink>
+                                <NavLink v-if="page.props.auth.user.roles?.includes('SuperAdmin')" :href="route('admin.users')" :active="route().current('admin.users')">
+                                    إدارة المستخدمين
+                                </NavLink>
                             </div>
                         </div>
 
