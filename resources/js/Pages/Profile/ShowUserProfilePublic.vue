@@ -1,5 +1,5 @@
 <template>
-    <Head title="الرئيسية" />
+    <Head :title="user.name" />
 
     <div class="min-h-screen bg-white">
         <!-- Header -->
@@ -42,13 +42,33 @@
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <div class="border-b border-black/10 bg-yellow-400/10 py-24">
+        <!-- Profile Info -->
+        <div class="border-b border-black/10 bg-yellow-400/10 py-12">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 class="mb-6 text-6xl font-bold text-black">اكتشف القصص والأفكار والخبرات</h1>
-                <p class="text-xl text-gray-600">
-                    اقرأ واكتب وشارك قصصك على منصتنا. انضم إلى مجتمعنا اليوم.
-                </p>
+                <div class="flex items-center space-x-4">
+                    <img
+                        :src="`https://ui-avatars.com/api/?name=${user.name}&background=random&size=128`"
+                        :alt="user.name"
+                        class="h-32 w-32 rounded-full"
+                    />
+                    <div class="mr-4">
+                        <h1 class="text-3xl font-bold text-black">{{ user.name }}</h1>
+                        <p v-if="user.bio" class="mt-2 text-gray-600">{{ user.bio }}</p>
+                        <div class="mt-4 flex items-center space-x-6">
+                            <div class="text-sm">
+                                <span class="font-semibold">20</span>
+                                <span class="text-gray-600"> متابِعون</span>
+                            </div>
+                            <div class="text-sm">
+                                <span class="font-semibold">0</span>
+                                <span class="text-gray-600"> متابَعون</span>
+                            </div>
+                        </div>
+                        <button class="mt-4 rounded-full bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+                            متابعة
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -56,22 +76,12 @@
         <main class="py-12">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
-                    <!-- Latest Posts -->
+                    <!-- Latest Posts of the user in show -->
                     <div class="lg:col-span-2">
-                        <h2 class="mb-8 text-2xl font-bold">أحدث المقالات</h2>
+                        <h2 class="mb-8 text-2xl font-bold">المقالات</h2>
                         <div class="space-y-8">
-                            <div v-for="post in latestPosts" :key="post.id" class="flex space-x-6">
+                            <div v-for="post in user.posts" :key="post.id" class="flex space-x-6">
                                 <div class="flex-1">
-                                    <Link :href="route('profile.showUserProfilePublic', post.user.id)">
-                                        <div class="flex items-center space-x-2">
-                                            <img
-                                                :src="`https://ui-avatars.com/api/?name=${post.user.name}&background=random`"
-                                                :alt="post.user.name"
-                                                class="h-6 w-6 rounded-full"
-                                            />
-                                            <span class="text-sm text-gray-600">{{ post.user.name }}</span>
-                                        </div>
-                                    </Link>
                                     <Link
                                         :href="route('posts.show', post.id)"
                                         class="mt-2 block"
@@ -95,50 +105,10 @@
                                         </Link>
                                     </div>
                                 </div>
-                                <div v-if="post.image" class="h-32 w-32">
-                                    <img
-                                        :src="post.image"
-                                        :alt="post.title"
-                                        class="h-full w-full object-cover"
-                                    />
-                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Sidebar -->
-                    <div class="lg:col-span-1">
-                        <!-- Staff Picks -->
-                        <div class="rounded-lg border border-gray-200 p-6">
-                            <h3 class="mb-6 text-lg font-bold">اختيارات المحررين</h3>
-                            <div class="space-y-6">
-                                <div v-for="post in staffPicks" :key="post.id">
-                                    <div class="flex items-center space-x-2">
-                                        <img
-                                            :src="`https://ui-avatars.com/api/?name=${post.user.name}&background=random`"
-                                            :alt="post.user.name"
-                                            class="h-6 w-6 rounded-full"
-                                        />
-                                        <span class="text-sm text-gray-600">{{ post.user.name }}</span>
-                                    </div>
-                                    <Link
-                                        
-                                        class="mt-2 block"
-                                    >
-                                        <h4 class="font-semibold text-gray-900">{{ post.title }}</h4>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer Links -->
-                        <div class="mt-8">
-                            <div class="flex flex-wrap gap-4 text-sm text-gray-600">
-                                <a href="#" class="hover:text-gray-900">سياسة الخصوصية</a>
-                                <a href="#" class="hover:text-gray-900">الشروط والأحكام</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </main>
@@ -149,8 +119,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
-    latestPosts: Array,
-    staffPicks: Array,
+    user: Object,
 });
 
 function route(...args) {

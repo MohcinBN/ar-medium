@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -64,5 +65,26 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function showUserProfilePublic($id)
+    {
+        $user = User::with(['posts' => function($query) {
+            $query->latest()->limit(5);
+        }])->findOrFail($id);
+
+        return Inertia::render('Profile/ShowUserProfilePublic', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'bio' => $user->bio,
+                'posts' => $user->posts->map(fn($post) => [
+                    'id' => $post->id,
+                    'title' => $post->title,
+                    'body' => $post->body,
+                    'created_at' => $post->created_at,
+                ]),
+            ],
+        ]);
     }
 }

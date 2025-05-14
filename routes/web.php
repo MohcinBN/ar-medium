@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// public user routes
+Route::get('/profile/{id}', [ProfileController::class, 'showUserProfilePublic'])->name('profile.showUserProfilePublic');
+
 // Social login routes
 Route::middleware('guest')->group(function () {
     Route::get('login', [SocialiteController::class, 'showLogin'])
